@@ -1,5 +1,6 @@
 import 'package:emart_app/Constant/MyExport.dart';
 import 'package:emart_app/Controller/ProductController.dart';
+import 'package:emart_app/View/chatScreen/ChatScreen.dart';
 
 class ItemDetails extends StatelessWidget {
   final String? title;
@@ -27,7 +28,17 @@ class ItemDetails extends StatelessWidget {
           title: title!.text.color(darkFontGrey).fontFamily(bold).make(),
           actions: [
             IconButton(onPressed: () {}, icon: Icon(Icons.share)),
-            IconButton(onPressed: () {}, icon: Icon(Icons.favorite)),
+            IconButton(
+                onPressed: () {
+                  if (controller.isfav.value) {
+                    controller.removefromwishList(data.id);
+                    controller.isfav(false);
+                  } else {
+                    controller.addtowishList(data.id);
+                    controller.isfav(true);
+                  }
+                },
+                icon: Icon(Icons.favorite)),
           ],
         ),
         body: Column(
@@ -104,7 +115,10 @@ class ItemDetails extends StatelessWidget {
                             Icons.message_rounded,
                             color: darkFontGrey,
                           ),
-                        )
+                        ).onTap(() {
+                          Get.to(() => const ChatScreen(),
+                              arguments: [data['p_seller'], data['vendor_id']]);
+                        })
                       ],
                     )
                         .box
