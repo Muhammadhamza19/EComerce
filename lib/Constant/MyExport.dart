@@ -17,7 +17,7 @@ export 'package:emart_app/View/AuthScreen/Signup.dart';
 export 'package:emart_app/View/HomeScreen/Home.dart';
 export 'package:emart_app/Constant/firebase_const.dart';
 export 'package:emart_app/Controller/HomeController.dart';
-export 'package:emart_app/View/CartScreen.dart/CartScreen.dart';
+export 'package:emart_app/View/CartScreen/CartScreen.dart';
 export 'package:emart_app/View/Categories/CategoriesScreen.dart';
 export 'package:emart_app/View/HomeScreen/HomeScreen.dart';
 export 'package:emart_app/View/ProfileScreen/ProfileScreen.dart';
