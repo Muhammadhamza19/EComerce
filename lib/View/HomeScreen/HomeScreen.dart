@@ -209,6 +209,18 @@ class HomeScreen extends StatelessWidget {
                   ),
                   //Grid View
                   20.heightBox,
+
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: "All Products"
+                        .text
+                        .color(darkFontGrey)
+                        .fontFamily(semibold)
+                        .size(16)
+                        .make(),
+                  ),
+                  20.heightBox,
+
                   GridView.builder(
                     shrinkWrap: true,
                     physics: NeverScrollableScrollPhysics(),

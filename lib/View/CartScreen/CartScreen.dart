@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:emart_app/Constant/MyExport.dart';
 import 'package:emart_app/Controller/cartController.dart';
 import 'package:emart_app/Services/Firestore_service.dart';
+import 'package:emart_app/View/CartScreen/ShipingDetails.dart';
 
 class CartScreen extends StatelessWidget {
   const CartScreen({super.key});
@@ -11,6 +12,16 @@ class CartScreen extends StatelessWidget {
     var controller = Get.put(CartController());
     return Scaffold(
         backgroundColor: whiteColor,
+        bottomNavigationBar: SizedBox(
+          height: 60,
+          child: MyButton(
+              color: redColor,
+              OnPress: () {
+                Get.to(() => ShippingDetails());
+              },
+              textcolor: whiteColor,
+              title: "Proceed to Shipping"),
+        ),
         appBar: AppBar(
           automaticallyImplyLeading: false,
           title:
@@ -35,6 +46,7 @@ class CartScreen extends StatelessWidget {
 
               Future.delayed(Duration.zero, () {
                 controller.calculate(data);
+                controller.productSnapshot = data;
               });
 
               return Padding(
@@ -92,14 +104,6 @@ class CartScreen extends StatelessWidget {
                         .width(context.screenWidth - 60)
                         .make(),
                     10.heightBox,
-                    SizedBox(
-                      width: context.screenWidth - 60,
-                      child: MyButton(
-                          color: redColor,
-                          OnPress: () {},
-                          textcolor: whiteColor,
-                          title: "Proceed to Shipping"),
-                    ),
                   ],
                 ),
               );

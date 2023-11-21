@@ -28,17 +28,22 @@ class ItemDetails extends StatelessWidget {
           title: title!.text.color(darkFontGrey).fontFamily(bold).make(),
           actions: [
             IconButton(onPressed: () {}, icon: Icon(Icons.share)),
-            IconButton(
-                onPressed: () {
-                  if (controller.isfav.value) {
-                    controller.removefromwishList(data.id);
-                    controller.isfav(false);
-                  } else {
-                    controller.addtowishList(data.id);
-                    controller.isfav(true);
-                  }
-                },
-                icon: Icon(Icons.favorite)),
+            Obx(
+              () => IconButton(
+                  onPressed: () {
+                    if (controller.isfav.value) {
+                      controller.removefromwishList(data.id, context);
+                      controller.isfav(false);
+                    } else {
+                      controller.addtowishList(data.id, context);
+                      controller.isfav(true);
+                    }
+                  },
+                  icon: Icon(
+                    Icons.favorite,
+                    color: controller.isfav.value ? redColor : darkFontGrey,
+                  )),
+            ),
           ],
         ),
         body: Column(

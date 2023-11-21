@@ -57,3 +57,4 @@ const wishlist = "My Wishlist", order = "My Order", message = "Message";
 const loggedin = "Logged in Successfully";
 const loggedout = "Logged out Successfully";
 const oldPass = "Old Password", newPass = "New Password";
+const payPal = "Paypal", stripe = "Stripe", cod = "Cash on Delivery";
