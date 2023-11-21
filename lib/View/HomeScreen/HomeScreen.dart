@@ -215,7 +215,7 @@ class HomeScreen extends StatelessWidget {
                     child: "All Products"
                         .text
                         .color(darkFontGrey)
-                        .fontFamily(semibold)
+                        .fontFamily(bold)
                         .size(16)
                         .make(),
                   ),
