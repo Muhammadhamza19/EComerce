@@ -1,4 +1,3 @@
-import 'package:emart_app/Common_Widget/exitdialog.dart';
 import 'package:emart_app/Constant/MyExport.dart';
 
 class Home extends StatelessWidget {
@@ -34,7 +33,7 @@ class Home extends StatelessWidget {
           label: account),
     ];
     var NavBody = [
-      const HomeScreen(),
+      HomeScreen(),
       const CategoriesScreen(),
       const CartScreen(),
       const ProfileScreen()

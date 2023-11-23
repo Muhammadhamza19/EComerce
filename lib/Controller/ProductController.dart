@@ -1,7 +1,4 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:emart_app/Constant/MyExport.dart';
-import 'package:emart_app/Models/category_model.dart';
-import 'package:flutter/services.dart';
 
 class ProductController extends GetxController {
   var quantity = 0.obs;
@@ -49,7 +46,8 @@ class ProductController extends GetxController {
     update();
   }
 
-  addtoCart({title, img, sellerName, color, qty, tprice, context}) async {
+  addtoCart(
+      {title, img, sellerName, color, qty, tprice, context, vendorID}) async {
     await firestore
         .collection(cartCollection)
         .doc()
@@ -57,6 +55,7 @@ class ProductController extends GetxController {
           'title': title,
           'img': img,
           'sellerName': sellerName,
+          'vendor_id': vendorID,
           'color': color,
           'qty': qty,
           'tprice': tprice,

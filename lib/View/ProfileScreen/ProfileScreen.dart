@@ -3,8 +3,11 @@ import 'package:emart_app/Constant/MyExport.dart';
 import 'package:emart_app/Controller/authController.dart';
 import 'package:emart_app/Controller/profileController.dart';
 import 'package:emart_app/Services/Firestore_service.dart';
+import 'package:emart_app/View/OrderScreen/OrderScreen.dart';
 import 'package:emart_app/View/ProfileScreen/EditScreen.dart';
 import 'package:emart_app/View/ProfileScreen/components/details_cards.dart';
+import 'package:emart_app/View/chatScreen/messageScreen.dart';
+import 'package:emart_app/View/wishlistScreen/wishlist_Screen.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
@@ -79,28 +82,54 @@ class ProfileScreen extends StatelessWidget {
                 ],
               ),
               20.heightBox,
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  detailCards(
-                      count: "${data['cart_count']}",
-                      title: "in Your cart",
-                      width: context.screenWidth / 3.4),
-                  detailCards(
-                      count: "${data['wishlist_count']}",
-                      title: "in Your wishlist",
-                      width: context.screenWidth / 3.4),
-                  detailCards(
-                      count: "${data['order_count']}",
-                      title: "Your orders",
-                      width: context.screenWidth / 3.4),
-                ],
+              FutureBuilder(
+                future: FireStoreService.getCounts(),
+                builder: (context, AsyncSnapshot snapshot) {
+                  if (!snapshot.hasData) {
+                    return const CircularProgressIndicator(
+                      valueColor: AlwaysStoppedAnimation(whiteColor),
+                    );
+                  } else {
+                    var countdata = snapshot.data;
+                    return Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        detailCards(
+                            count: countdata[0].toString(),
+                            title: "in Your cart",
+                            width: context.screenWidth / 3.4),
+                        detailCards(
+                            count: countdata[1].toString(),
+                            title: "in Your wishlist",
+                            width: context.screenWidth / 3.4),
+                        detailCards(
+                            count: countdata[2].toString(),
+                            title: "Your orders",
+                            width: context.screenWidth / 3.4),
+                      ],
+                    );
+                  }
+                },
               ),
               40.heightBox,
               ListView.separated(
                       shrinkWrap: true,
                       itemBuilder: (BuildContext context, int index) {
                         return ListTile(
+                          onTap: () {
+                            switch (index) {
+                              case 0:
+                                Get.to(() => const OrderScreen());
+                                break;
+                              case 1:
+                                Get.to(() => const WishlistScreen());
+                                break;
+                              case 2:
+                                Get.to(() => const MessagesScreen());
+                                break;
+                              default:
+                            }
+                          },
                           leading: Image.asset(
                             profileButoonIcons[index],
                             width: 22,

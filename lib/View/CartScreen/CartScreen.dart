@@ -1,8 +1,4 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:emart_app/Constant/MyExport.dart';
-import 'package:emart_app/Controller/cartController.dart';
-import 'package:emart_app/Services/Firestore_service.dart';
-import 'package:emart_app/View/CartScreen/ShipingDetails.dart';
 
 class CartScreen extends StatelessWidget {
   const CartScreen({super.key});
@@ -58,7 +54,11 @@ class CartScreen extends StatelessWidget {
                       itemCount: data.length,
                       itemBuilder: (context, index) {
                         return ListTile(
-                          leading: Image.network('${data[index]['img']}'),
+                          leading: Image.network(
+                            '${data[index]['img']}',
+                            width: 80,
+                            fit: BoxFit.fill,
+                          ),
                           title:
                               "${data[index]['title']} (x${data[index]['qty']})"
                                   .text

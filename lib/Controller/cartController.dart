@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:emart_app/Constant/MyExport.dart';
 
 class CartController extends GetxController {
@@ -10,6 +9,7 @@ class CartController extends GetxController {
   var phoneController = TextEditingController();
 
   var paymentIndex = 0.obs;
+  var placingOrder = false.obs;
 
   late dynamic productSnapshot;
   var products = [];
@@ -25,6 +25,8 @@ class CartController extends GetxController {
   }
 
   placeMyOrder({required orderPaymentMethod, required totalAmount}) async {
+    placingOrder(true);
+
     await getProductDetail();
     await firestore.collection(orderCollection).doc().set({
       'order_code': "233981237",
@@ -46,6 +48,7 @@ class CartController extends GetxController {
       'totalAmount': totalAmount,
       'orders': FieldValue.arrayUnion(products)
     });
+    placingOrder(false);
   }
 
   getProductDetail() {
@@ -54,9 +57,17 @@ class CartController extends GetxController {
       products.add({
         'color': productSnapshot[i]['color'],
         'img': productSnapshot[i]['img'],
+        'vendor_id': productSnapshot[i]['vendor_id'],
+        'tprice': productSnapshot[i]['tprice'],
         'qty': productSnapshot[i]['qty'],
         'title': productSnapshot[i]['title']
       });
+    }
+  }
+
+  clearChart() {
+    for (var i = 0; i < productSnapshot.length; i++) {
+      firestore.collection(cartCollection).doc(productSnapshot[i].id).delete();
     }
   }
 }

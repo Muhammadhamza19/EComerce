@@ -1,5 +1,4 @@
 import 'package:emart_app/Constant/MyExport.dart';
-import 'package:emart_app/Controller/cartController.dart';
 
 class PayementMethods extends StatelessWidget {
   const PayementMethods({super.key});
@@ -18,16 +17,26 @@ class PayementMethods extends StatelessWidget {
       ),
       bottomNavigationBar: SizedBox(
         height: 60,
-        child: MyButton(
-            color: redColor,
-            OnPress: () {
-              controller.placeMyOrder(
-                  orderPaymentMethod:
-                      paymentMethod[controller.paymentIndex.value],
-                  totalAmount: controller.totalP.value);
-            },
-            textcolor: whiteColor,
-            title: "Place my order"),
+        child: controller.placingOrder.value
+            ? Center(
+                child: const CircularProgressIndicator(
+                  valueColor: AlwaysStoppedAnimation(redColor),
+                ),
+              )
+            : MyButton(
+                color: redColor,
+                OnPress: () async {
+                  await controller.placeMyOrder(
+                      orderPaymentMethod:
+                          paymentMethod[controller.paymentIndex.value],
+                      totalAmount: controller.totalP.value);
+
+                  await controller.clearChart();
+                  VxToast.show(context, msg: "Order placed successfully");
+                  Get.offAll(const Home());
+                },
+                textcolor: whiteColor,
+                title: "Place my order"),
       ),
       body: Padding(
         padding: const EdgeInsets.all(12.0),
