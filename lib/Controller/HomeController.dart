@@ -10,6 +10,9 @@ class HomeController extends GetxController {
   var currentnavIndex = 0.obs;
   var username = "";
 
+  var featuredList = [];
+  var searchController = TextEditingController();
+
   getUserName() async {
     var name = await firestore
         .collection(userCollection)

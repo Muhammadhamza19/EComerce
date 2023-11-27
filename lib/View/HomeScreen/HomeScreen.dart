@@ -1,11 +1,13 @@
 import 'package:emart_app/Constant/MyExport.dart';
 import 'package:emart_app/View/Categories/item_details.dart';
+import 'package:emart_app/View/HomeScreen/Search_detail.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    var contoller = Get.find<HomeController>();
     return Container(
       padding: const EdgeInsets.all(12),
       color: lightGrey,
@@ -19,8 +21,15 @@ class HomeScreen extends StatelessWidget {
             height: 60,
             color: lightGrey,
             child: TextFormField(
-              decoration: const InputDecoration(
-                  suffixIcon: Icon(Icons.search),
+              controller: contoller.searchController,
+              decoration: InputDecoration(
+                  suffixIcon: Icon(Icons.search).onTap(() {
+                    if (contoller.searchController.text.isNotEmptyAndNotNull) {
+                      Get.to(() => SearchScreen(
+                            title: contoller.searchController.text,
+                          ));
+                    }
+                  }),
                   filled: true,
                   border: InputBorder.none,
                   fillColor: whiteColor,
@@ -122,11 +131,13 @@ class HomeScreen extends StatelessWidget {
                                 children: [
                                   FeatureButton(
                                       icon: featuredImages1[index],
-                                      title: featuredTitleList1[index]),
+                                      title: featuredTitleList1[index],
+                                      data: featuredTitleList1[index]),
                                   20.heightBox,
                                   FeatureButton(
                                       icon: featuredImages2[index],
-                                      title: featuredTitleList2[index]),
+                                      title: featuredTitleList2[index],
+                                      data: featuredTitleList2[index]),
                                 ],
                               )).toList(),
                     ),
@@ -146,26 +157,44 @@ class HomeScreen extends StatelessWidget {
                         10.heightBox,
                         SingleChildScrollView(
                           scrollDirection: Axis.horizontal,
-                          child: Row(
-                            children: List.generate(
-                                6,
-                                (index) => Column(
+                          child: FutureBuilder(
+                            future: FireStoreService.allFeaturedProducts(),
+                            builder: (context,
+                                AsyncSnapshot<QuerySnapshot> snapshot) {
+                              if (snapshot.connectionState ==
+                                  ConnectionState.waiting) {
+                                return const CircularProgressIndicator(
+                                  valueColor: AlwaysStoppedAnimation(redColor),
+                                );
+                              } else if (snapshot.hasError ||
+                                  snapshot.data == null) {
+                                return const Text("Error loading data");
+                              } else if (snapshot.data!.docs.isEmpty) {
+                                return const Text("No Featured Products");
+                              } else {
+                                var featuredData = snapshot.data!.docs;
+                                return Row(
+                                  children: List.generate(
+                                    featuredData.length,
+                                    (index) => Column(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
-                                        Image.asset(
-                                          imgP1,
-                                          width: 150,
+                                        Image.network(
+                                          featuredData[index]['p_img'][0],
+                                          width: 200,
+                                          height: 200,
                                           fit: BoxFit.cover,
                                         ),
                                         10.heightBox,
-                                        "Laptop 4GB/6GB"
+                                        "${featuredData[index]['p_name']}"
                                             .text
                                             .fontFamily(semibold)
                                             .color(darkFontGrey)
                                             .make(),
                                         10.heightBox,
-                                        "\$6000"
+                                        "${featuredData[index]['p_price']}"
+                                            .numCurrency
                                             .text
                                             .color(redColor)
                                             .fontFamily(bold)
@@ -179,7 +208,19 @@ class HomeScreen extends StatelessWidget {
                                             horizontal: 4))
                                         .roundedSM
                                         .padding(const EdgeInsets.all(8))
-                                        .make()),
+                                        .make()
+                                        .onTap(() {
+                                      Get.put(ProductController())
+                                          .checkIffav(featuredData[index]);
+                                      Get.to(() => ItemDetails(
+                                          title:
+                                              "${featuredData[index]['p_name']}",
+                                          data: featuredData[index]));
+                                    }),
+                                  ),
+                                );
+                              }
+                            },
                           ),
                         )
                       ],

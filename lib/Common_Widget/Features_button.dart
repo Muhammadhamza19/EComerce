@@ -1,6 +1,7 @@
 import 'package:emart_app/Constant/MyExport.dart';
+import 'package:emart_app/View/Categories/CategoryDetail.dart';
 
-Widget FeatureButton({String? title, icon}) {
+Widget FeatureButton({String? title, icon, data}) {
   return Row(
     children: [
       Image.asset(
@@ -17,5 +18,11 @@ Widget FeatureButton({String? title, icon}) {
       .margin(const EdgeInsets.symmetric(horizontal: 4))
       .white
       .padding(const EdgeInsets.all(2))
-      .make();
+      .make()
+      .onTap(() {
+    Get.put(ProductController()).getCategories(data);
+    Get.to(() => Categorydetail(
+          title: title,
+        ));
+  });
 }
